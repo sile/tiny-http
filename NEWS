@@ -1,0 +1,12 @@
+[0.1.8]
+- common-utils-0.0.13に対応
+
+[0.1.7]
+- request関数追加: URIからの読込み対応
+
+[0.1.6]
+- レスポンスヘッダに、Content-LengthとTransfer-Encodingが指定されていない場合でも読み込めるように修正
+ - Connectionがcloseなら、EOSまで読み込む
+
+[0.1.5]
+- HTTPヘッダのHOSTも指定可能なように変更
