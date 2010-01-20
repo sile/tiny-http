@@ -117,9 +117,15 @@
     (register-groups-bind (charset) ("(?i)(?:charset|encoding)=['\" ]*(.+?)[ \"';>]" top500)
       (kwd charset))))
 
-;; guess3: from octets pattern
+;; guess3: try and error and retry
 (defun guess3 (octets)
-  (guess:ces-guess-from-vector octets :jp))
+  (dolist (encode '(:utf-8 :sjis :euc-jp))
+    (handler-case
+       (progn
+	 (format *trace-output* "~&; guess3: ~A~%" encode)
+         (sb-ext:octets-to-string octets :external-format encode :end (min (length octets) 512)) 
+	 (return-from guess3 encode))
+      (error ()))))
 
 (defun guess (octets header-fields)
   (or (guess1 header-fields) (guess2 octets) (guess3 octets) sb-impl::*default-external-format*))
