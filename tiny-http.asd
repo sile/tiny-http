@@ -2,13 +2,12 @@
   :name "tiny-http"
   :version "0.2.0"
   :author "Takeru Ohta"
-  :description "a tiny HTTP client"
+  :description "A HTTP client"
   
-  :depends-on (:sb-bsd-sockets :cl-ppcre :cl+ssl :common-utils :puri)
+  :depends-on (:sb-bsd-sockets :cl+ssl :common-utils :puri)
 
+  :serial t
   :components ((:file "package")
-	       (:file "tiny-http"
-		      :depends-on ("package" "tiny-http-internal"))
-	       (:file "tiny-http-internal"
-		      :depends-on ("package"))))
-
+               (:file "util")
+               (:file "tiny-http-internal")
+               (:file "tiny-http")))

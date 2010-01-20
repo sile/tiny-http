@@ -52,7 +52,7 @@
      (parse-integer first :start (position #\Space first) :junk-allowed t)
 
      ;; header fields
-     (mapcar (lm (register-groups-bind (key val) ("^(?s)(.+?): ?(.*)$" $) 
+     (mapcar (lm (destructuring-bind (key val) (split ": " $ :limit 2)
                    (cons (kwd key) val)))
 	     rest))))
 
@@ -108,14 +108,14 @@
 ;; guess1: from header fields
 (defun guess1 (header-fields)
   (a.when (assocdr :content-type header-fields)
-    (register-groups-bind (charset) ("(?i)charset=['\" ]*(.+?)(?:[ \"';]|$)" it)
-      (kwd charset))))
+    (a.when (get-charset it)
+      (kwd it))))
 
 ;; guess2: from meta-tag in html
 (defun guess2 (octets &aux (len (length octets)))
   (let ((top500 (octets-to-ascii (subseq octets 0 (min 1024 len)))))
-    (register-groups-bind (charset) ("(?i)(?:charset|encoding)=['\" ]*(.+?)[ \"';>]" top500)
-      (kwd charset))))
+    (a.when (or (get-charset top500) (get-encoding top500))
+      (kwd it))))
 
 ;; guess3: try and error and retry
 (defun guess3 (octets)

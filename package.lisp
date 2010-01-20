@@ -2,7 +2,6 @@
   (:use :common-lisp 
 	:common-utils
 	:puri
-	:cl-ppcre 
 	:cl+ssl
 	:sb-ext
 	:sb-bsd-sockets)
