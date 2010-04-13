@@ -24,9 +24,16 @@
   (defun post (host path body &key ssl (port (if ssl 443 80)) header (external-format :guess) (force-decode t))
     (with-http-or-https-stream (io host port ssl)
       (let ((body (etypecase body 
+                    (list           (string-to-octets
+				     (with-output-to-string (out)
+				       (format out "~{~A~^&~}" 
+					       (loop FOR (key value) IN body COLLECT
+						     (format nil "~A=~A" key (url-encode value)))))))
                     (string         (string-to-octets body))
 		    ((vector octet) body))))
 	(setf header `(:content-length ,(length body) ,@header))
+	(unless (getf header :content-type)
+	  (setf (getf header :content-type) "application/x-www-form-urlencoded"))
 	(send-block "POST"                           ; send
 	  (write-sequence body io))         
 	#1#)))                                       ; recv

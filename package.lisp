@@ -10,6 +10,7 @@
 	   :post
 	   :head
 	   :request
+	   :url-encode
 	   :*default-unknown-character*))
 (in-package :tiny-http)
 
