@@ -4,7 +4,7 @@
   :author "Takeru Ohta"
   :description "A HTTP client"
   
-  :depends-on (:sb-bsd-sockets :cl+ssl :common-utils :puri)
+  :depends-on (:sb-bsd-sockets :common-utils :puri)
 
   :serial t
   :components ((:file "package")
